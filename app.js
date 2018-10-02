@@ -12,9 +12,9 @@ app.get('/', (req, res) => {
  
     var optionsImageWatermark = {
         type: "image",
-        source: "/Users/damiengallagher/Development/sourceControl/dynamic-image-lib/dynamic-image-lib-usage/images/input/image.jpeg",
-        logo: "/Users/damiengallagher/Development/sourceControl/dynamic-image-lib/dynamic-image-lib-usage/images/input/watermark.png", // This is optional if you have provided text Watermark
-        destination: "/Users/damiengallagher/Development/sourceControl/dynamic-image-lib/dynamic-image-lib-usage/images/output/output-local-file-image.png",
+        source: "./images/input/image.jpeg",
+        logo: "./images/input/watermark.png", // This is optional if you have provided text Watermark
+        destination: "./images/output/output-local-file-image.png",
         position: {
             logoX: 10,
             logoY: 10,
@@ -27,8 +27,8 @@ app.get('/', (req, res) => {
     var optionsTextWatermark = {
         type: "text",
         text: "Watermark text", // This is optional if you have provided text Watermark
-        destination: "/Users/damiengallagher/Development/sourceControl/dynamic-image-lib/dynamic-image-lib-usage/images/output/output-local-file-text.jpeg",
-        source: "/Users/damiengallagher/Development/sourceControl/dynamic-image-lib/dynamic-image-lib-usage/images/input/image.jpeg",
+        destination: "./images/output/output-local-file-text.jpeg",
+        source: "./images/input/image.jpeg",
         position: {
             logoX : 10,
             logoY : 20,
@@ -62,8 +62,8 @@ app.post('/', (req, res) => {
     var optionsImageWatermark = {
         type: "image",
         source: req.files.imageFile,
-        logo: "/Users/damiengallagher/Development/sourceControl/dynamic-image-lib/dynamic-image-lib-usage/images/input/watermark.png", // This is optional if you have provided text Watermark
-        destination: "/Users/damiengallagher/Development/sourceControl/dynamic-image-lib/dynamic-image-lib-usage/images/output/output-file-upload-image.jpeg",
+        logo: "./images/input/watermark.png", // This is optional if you have provided text Watermark
+        destination: "./images/output/output-file-upload-image.jpeg",
         position: {
             logoX: 10,
             logoY: 10,
@@ -76,7 +76,7 @@ app.post('/', (req, res) => {
     var optionsTextWatermark = {
         type: "text",
         text: "Watermark text", // This is optional if you have provided text Watermark
-        destination: "/Users/damiengallagher/Development/sourceControl/dynamic-image-lib/dynamic-image-lib-usage/images/output/output-file-upload-text.jpeg",
+        destination: "./images/output/output-file-upload-text.jpeg",
         source: req.files.imageFile,
         position: {
             logoX : 10,
