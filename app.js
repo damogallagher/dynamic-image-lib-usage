@@ -1,16 +1,18 @@
 const express = require('express');
 const watermark = require('dynamic-image-lib');
+//var watermark = require('dynamic-watermark');
 const fileUpload = require('express-fileupload');
 var fs = require('fs');
 
 const app = express();
 app.use(fileUpload());
 const port = 3000
-
-app.get('/', (req, res) => {
-    res.send('Hello World !');
  
-    var optionsImageWatermark = {
+
+app.post('/', (req, res) => {
+    res.send('Hello World - File Upload!');
+ 
+    var optionsImageWatermarkFileLoc = {
         type: "image",
         source: "./images/input/image.jpeg",
         logo: "./images/input/watermark.png", // This is optional if you have provided text Watermark
@@ -24,7 +26,7 @@ app.get('/', (req, res) => {
         //position: 'left-top'
     }; 
  
-    var optionsTextWatermark = {
+    var optionsTextWatermarkFileLoc = {
         type: "text",
         text: "Watermark text", // This is optional if you have provided text Watermark
         destination: "./images/output/output-local-file-text.jpeg",
@@ -39,29 +41,22 @@ app.get('/', (req, res) => {
             fontSize: 20, //In px default : 20
             color: '#AAF122' // Text color in hex default: #000000
         }
-    };
+    };   
 
     //optionsImageWatermark or optionsTextWatermark
-    watermark.embedWatermark(optionsImageWatermark, function (status) {
+    watermark.embedWatermark(optionsImageWatermarkFileLoc, function (status) {
         //Do what you want to do here
-        console.log('Status:',status);
+        console.log('1. Status:',status);
     });
-    watermark.embedWatermark(optionsTextWatermark, function (status) {
+    watermark.embedWatermark(optionsTextWatermarkFileLoc, function (status) {
         //Do what you want to do here
-        console.log('Status:',status);
-    });    
-});
- 
-app.post('/', (req, res) => {
-    res.send('Hello World - File Upload!');
- 
-    //console.log(req); 
-    //console.log(req.files);
-    console.log(req.files.imageFile);
-  
+        console.log('2. Status:',status);
+    });  
+
+
     var optionsImageWatermark = {
         type: "image",
-        source: req.files.imageFile,
+        sourceUpload: req.files.imageFile,
         logo: "./images/input/watermark.png", // This is optional if you have provided text Watermark
         destination: "./images/output/output-file-upload-image.jpeg",
         position: {
@@ -77,7 +72,7 @@ app.post('/', (req, res) => {
         type: "text",
         text: "Watermark text", // This is optional if you have provided text Watermark
         destination: "./images/output/output-file-upload-text.jpeg",
-        source: req.files.imageFile,
+        sourceUpload: req.files.imageFile,
         position: {
             logoX : 10,
             logoY : 20,
@@ -89,27 +84,30 @@ app.post('/', (req, res) => {
             color: '#AAF122' // Text color in hex default: #000000
         }
     };
-
+ 
         //optionsImageWatermark or optionsTextWatermark
-        watermark.embedWatermarkFromFile(optionsImageWatermark, function (status) {
+        watermark.embedWatermark(optionsImageWatermark, function (status) {
             //Do what you want to do here
-            console.log('1. Status:',status); 
-
-            var wstream = fs.createWriteStream(optionsImageWatermark.destination);
-            wstream.write(status);
-            wstream.end();
+            console.log('3. Status:',status); 
+            if (status !== null) {
+                var wstream = fs.createWriteStream(optionsImageWatermark.destination);
+                wstream.write(status);
+                wstream.end();
+            }
         }); 
-
-        watermark.embedWatermarkFromFile(optionsTextWatermark, function (status) {
+ 
+        watermark.embedWatermark(optionsTextWatermark, function (status) {
             //Do what you want to do here
-            console.log('2. Status:',status); 
+            console.log('4. Status:',status);  
 
-            var wstream = fs.createWriteStream(optionsTextWatermark.destination);
-            wstream.write(status);
-            wstream.end();
+            if (status !== null) {
+                var wstream = fs.createWriteStream(optionsTextWatermark.destination);
+                wstream.write(status);
+                wstream.end();
+            }
         }); 
 });
-
+  
 
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
