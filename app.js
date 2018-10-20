@@ -22,6 +22,10 @@ app.post('/', (req, res) => {
             logoY: 10,
             logoHeight: 200,
             logoWidth: 200
+        },
+        resize: {
+            width: 700,
+            height: 700            
         }
         //position: 'left-top'
     };
@@ -40,6 +44,10 @@ app.post('/', (req, res) => {
         textOption: {
             fontSize: 20, //In px default : 20
             color: '#AAF122' // Text color in hex default: #000000
+        },
+        resize: {
+            width: 100,
+            height: 100            
         }
     };
 
@@ -53,6 +61,10 @@ app.post('/', (req, res) => {
             logoY: 10,
             logoHeight: 200,
             logoWidth: 200
+        },
+        resize: {
+            width: 700,
+            height: 700            
         }
         //position: 'left-top'
     };
@@ -71,12 +83,17 @@ app.post('/', (req, res) => {
         textOption: {
             fontSize: 20, //In px default : 20
             color: '#AAF122' // Text color in hex default: #000000
+        },
+        resize: {
+            width: 100,
+            height: 100            
         }
     }; 
 
     //optionsImageWatermark or optionsTextWatermark
     embedWatermark(optionsImageWatermarkFileLoc).then((status) => {
         console.log('1. Status:', status);
+        optionsImageWatermarkFileLoc.source = optionsImageWatermarkFileLoc.destination;
         resize(optionsImageWatermarkFileLoc).then((resizeStatus) => {
             console.log('1. resizeStatus:', status);
         });
@@ -88,6 +105,7 @@ app.post('/', (req, res) => {
     
     embedWatermark(optionsTextWatermarkFileLoc).then((status) => {
         console.log('2. Status:', status);
+        optionsTextWatermarkFileLoc.source = optionsImageWatermarkFileLoc.destination;
         resize(optionsTextWatermarkFileLoc).then((resizeStatus) => {
             console.log('2. resizeStatus:', status);
         });
@@ -97,11 +115,11 @@ app.post('/', (req, res) => {
    
   
     // // //optionsImageWatermark or optionsTextWatermark
-    embedWatermark(optionsImageWatermark).then((status) => {
+    embedWatermark(optionsImageWatermark).then((buffer) => {
         console.log('3. Status:', status)
   
         var wstream = fs.createWriteStream(optionsImageWatermark.destination);
-        wstream.write(status);
+        wstream.write(buffer);
         wstream.end(); 
  
         optionsImageWatermark.source = optionsImageWatermark.destination;
@@ -115,11 +133,11 @@ app.post('/', (req, res) => {
     });
 
        
-    embedWatermark(optionsTextWatermark).then((status) => {
+    embedWatermark(optionsTextWatermark).then((buffer) => {
         console.log('4. Status:', status)
 
         var wstream = fs.createWriteStream(optionsTextWatermark.destination);
-        wstream.write(status);
+        wstream.write(buffer);
         wstream.end();
 
         optionsTextWatermark.source = optionsTextWatermark.destination;
