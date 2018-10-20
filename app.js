@@ -105,7 +105,7 @@ app.post('/', (req, res) => {
     
     embedWatermark(optionsTextWatermarkFileLoc).then((status) => {
         console.log('2. Status:', status);
-        optionsTextWatermarkFileLoc.source = optionsImageWatermarkFileLoc.destination;
+        optionsTextWatermarkFileLocm.source = optionsImageWatermarkFileLoc.destination;
         resize(optionsTextWatermarkFileLoc).then((resizeStatus) => {
             console.log('2. resizeStatus:', status);
         });
