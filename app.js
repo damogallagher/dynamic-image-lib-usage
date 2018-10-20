@@ -1,13 +1,13 @@
 const express = require('express');
-const watermark = require('dynamic-image-lib');
+const {embedWatermark, resize} = require('dynamic-image-lib');
 //var watermark = require('dynamic-watermark');
 const fileUpload = require('express-fileupload');
 var fs = require('fs');
-
+ 
 const app = express();
 app.use(fileUpload());
 const port = 3000
-
+   
 
 app.post('/', (req, res) => {
     res.send('Hello World - File Upload!');
@@ -25,7 +25,7 @@ app.post('/', (req, res) => {
         }
         //position: 'left-top'
     };
-
+    
     var optionsTextWatermarkFileLoc = {
         type: "text",
         text: "Watermark text", // This is optional if you have provided text Watermark
@@ -56,7 +56,7 @@ app.post('/', (req, res) => {
         }
         //position: 'left-top'
     };
-
+ 
     var optionsTextWatermark = {
         type: "text",
         text: "Watermark text", // This is optional if you have provided text Watermark
@@ -72,38 +72,62 @@ app.post('/', (req, res) => {
             fontSize: 20, //In px default : 20
             color: '#AAF122' // Text color in hex default: #000000
         }
-    };
+    }; 
 
     //optionsImageWatermark or optionsTextWatermark
-    watermark.embedWatermark(optionsImageWatermarkFileLoc).then((status) => {
+    embedWatermark(optionsImageWatermarkFileLoc).then((status) => {
         console.log('1. Status:', status);
-    }).catch((err) => {
-        console.log("1. Err:", err);
-    });
-    watermark.embedWatermark(optionsTextWatermarkFileLoc).then((status) => {
-        console.log('1. Status:', status);
+        resize(optionsImageWatermarkFileLoc).then((resizeStatus) => {
+            console.log('1. resizeStatus:', status);
+        });
     }).catch((err) => {
         console.log("1. Err:", err);
     });
 
 
-    // //optionsImageWatermark or optionsTextWatermark
-    watermark.embedWatermark(optionsImageWatermark).then((status) => {
+    
+    embedWatermark(optionsTextWatermarkFileLoc).then((status) => {
+        console.log('2. Status:', status);
+        resize(optionsTextWatermarkFileLoc).then((resizeStatus) => {
+            console.log('2. resizeStatus:', status);
+        });
+    }).catch((err) => {
+        console.log("1. Err:", err);
+    });
+   
+  
+    // // //optionsImageWatermark or optionsTextWatermark
+    embedWatermark(optionsImageWatermark).then((status) => {
         console.log('3. Status:', status)
-
+  
         var wstream = fs.createWriteStream(optionsImageWatermark.destination);
         wstream.write(status);
-        wstream.end();
+        wstream.end(); 
+ 
+        optionsImageWatermark.source = optionsImageWatermark.destination;
+        resize(optionsImageWatermark).then((resizeStatus) => {
+            console.log('3. resizeStatus:', resizeStatus);
+        }).catch((err) => {
+            console.log("1.1. Err:", err);
+        });
     }).catch((err) => {
         console.log("1. Err:", err);
     });
 
-    watermark.embedWatermark(optionsTextWatermark).then((status) => {
+       
+    embedWatermark(optionsTextWatermark).then((status) => {
         console.log('4. Status:', status)
 
         var wstream = fs.createWriteStream(optionsTextWatermark.destination);
         wstream.write(status);
         wstream.end();
+
+        optionsTextWatermark.source = optionsTextWatermark.destination;
+        resize(optionsTextWatermark).then((resizeStatus) => {
+            console.log('4. resizeStatus:', resizeStatus);
+        }).catch((err) => {
+            console.log("1.1. Err:", err);
+        });
     }).catch((err) => {
         console.log("1. Err:", err);
     });
