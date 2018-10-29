@@ -9,9 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dynamic-image-lib": "^1.0.2",
     "dynamic-watermark": "^1.0.0",
-    "express": "^4.16.3",
-    "express-fileupload": "^1.0.0-alpha.1"
+    "empty-folder": "^2.0.2",
+    "express": "^4.16.4",
+    "express-fileupload": "^1.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.4"
